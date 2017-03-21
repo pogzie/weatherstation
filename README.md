@@ -51,3 +51,25 @@ Humidity = 42.0, Temp = 30.0
 ```
 
 For any errors, it will output an `ERROR`. The logic behind this is that parsing the output via Python would be easier. All are in one line separated by a comma. Catching the error would also be easier since it generally outputs a universal `ERROR` if something goes wrong. 
+
+### get_sensor_data.py
+The `get_sensor_data.py` is divided into several parts and configurable options.
+
+#### ENDPOINT_HOST  
+The `ENDPOINT_HOST` is the IP address or the FQDN of the server which hosts the database and the front end application. This will be where you will throw your sensor data
+
+#### ENDPOINT_API_URL 
+The `ENDPOINT_API_URL` starts with a `/` and ends with a `?`. This is attached to the `ENDPOINT_HOST` towards the end of the source code in order for us to be able to assemble a URL where we will do the API calls.
+
+#### ENDPOINT_KEY 
+This is a security feature to make sure that no other device is doing an API call without proper authorization. A `device_id` and a `key` should be generated from the endpoint and is saved to the database. When an API call happens, it will cross reference the `device_id` along with the `key` before accepting the values submitted to be saved to the database.
+
+#### ENDPOINT_?PARAM?
+These are the `ENDPOINT_` variables that is part of the assembled URL. I made it customizable so that adding new sensors would be easy. This should match the values on the endpoint side. 
+
+__NOTE TO SELF__: Maybe I should remove this. It would be easier to mandate a certain parameter variable on both collector and server so as to make it less confusing for the ones setting this up. 
+
+#### run_command(COMMAND) Function
+This function runs the specific C (or other) command you have on the same directory path. Expected output would be `Name = Value, Another_Name = Another_Value`. Expected error string should contain `ERROR`. It will loop until a good value is found and will automatically remove the `\n` and white spaces before returning the value. 
+
+If you are adding other sensors, you are expected to follow the output format and the error format. You are also exptected to know the output and catch and assign the values accordingly. 
